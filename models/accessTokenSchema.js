@@ -6,8 +6,7 @@ const tokenSchema = new mongoose.Schema({
     }, 
     accessToken:{
         type:String
-    },
-    createdAt: { type: Date, expires: '60m', default: Date.now }
+    }
 })
 
 export default mongoose.model('userTokenCollection', tokenSchema);
