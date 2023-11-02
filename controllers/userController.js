@@ -1,49 +1,48 @@
-import md5 from 'md5'
+import jwt from 'jsonwebtoken';
 import {validationResult} from 'express-validator'
+import { fetchUser, matchPassword, registerUser, generateToken, saveToken, delete_user, dataWithPage } from '../services/userServices.js';
 import Users from '../models/userModel.js'
 import { userAddress } from '../models/userAddressModel.js'
-import userTokenCollection from '../models/accessTokenSchema.js'
-import { compare_password, hash_password} from '../helperFunction.js';
+import { compare_password, hash_password} from '../utility/helpers.js';
+import {secretKey} from '../config/config.js'
 
 
 //USER REGISTERATION CONTROLLER
 export const userRegister = async(req, res) => {
-  const {firstName ,lastName, userName, email, password, confirmPassword} = req.body;
+
   const result = validationResult(req);
   if(!result.isEmpty())
   {
     return res.status(403).send({message:"please provide right fields", result});
   }
+
   try {
     //matching password
-    if(password!==confirmPassword)
+    if(!matchPassword(req.body.password, req.body.confirmPassword))
     {
-        return res.status(203).send({success:true, message:"password mismatch"});
+        return res.status(401).send("password mismatch");
     }
 
     //checking existing user
-    const existingUser = await Users.findOne({email})
+    const existingUser = await fetchUser({email:req.body.email})
     if(existingUser)
     {
-        return res.status(403).send({success:true, message:"email already exists"});
+        return res.status(406).send("email already exists");
     }
 
     //checking is user register with same username
-    const userNameExists =await Users.findOne({userName});
+    const userNameExists =await fetchUser({userName:req.body.userName});
     if(userNameExists)
     {
-        return res.status(403).send({success:true, message:"user already exist with this usernamae"})
+        return res.status(403).send("user already exist with this usernamae")
     }
 
     //registering user
-    const hashedPassword = await hash_password(password);
-    const newUser = new Users({firstName, lastName, userName, email, password:hashedPassword})
-    await newUser.save();
+    const newUser = await registerUser(req.body)
     res.status(201).send({success:true, message:"user registered successfully", newUser})
 
   } catch (error) {
-    console.log(error);
-    res.status(500).send({success:false, message:"internal server error", error});
+    res.status(501).send({success:false, message:"internal server error", error});
   }
 
 }
@@ -51,32 +50,29 @@ export const userRegister = async(req, res) => {
 
 //USER LOGIN CONTROLLER
 export const  userLogin = async (req, res) => {
- const {email , password} = req.body;
  const result = validationResult(req);
-
   if(!result.isEmpty())
   {
-    return res.status(403).send({message:"please provide right fields", result});
+    return res.status(406).send({message:"please provide right fields", result});
   }
   
  try {
-   const existingUser = await Users.findOne({email});
+   const existingUser = await fetchUser({email:req.body.email});
    //checking existing user
    if(!existingUser)
    {
-    return res.status(204).send({success:true, message:"user not found"});
+    return res.status(404).send("user not found");
    }
 
    //matching password
-   const isTrue = await compare_password(password, existingUser.password);
+   const isTrue = await compare_password(req.body.password, existingUser.password);
    if(!isTrue)
    {
-    return res.status(203).send({success:true, message:"email or password is incorrect"});
+    return res.status(203).send({message:"email or password is incorrect"});
    }
-    const user_token = md5(existingUser.password)
-    const newTokenCollection = new userTokenCollection({user_id:existingUser._id, accessToken:user_token});
-    console.log(user_token, newTokenCollection);
-    await newTokenCollection.save();
+
+    const user_token = generateToken(req.body.password)
+    await saveToken({user_id:existingUser._id, accessToken:user_token});
     res.status(200).send({success:true, message:"user login successfully", access_token:user_token});
 
  } catch (error) {
@@ -89,10 +85,10 @@ export const  userLogin = async (req, res) => {
 //CONTROOLER TO GET A SINGLE USER
 export const getUser = async(req, res) => {
   try {
-    const user_data= await Users.findOne({_id:req.id});
+    const user_data= await fetchUser({_id:req.id});
     if(!user_data)
     {
-      return res.status(204).send({message:"user is not found"})
+      return res.status(401).send("user is not found")
     }
     res.status(200).send({sucess:true, message:"user found sucessfully", user_data})
   } catch (error) {
@@ -103,7 +99,7 @@ export const getUser = async(req, res) => {
 //CONTROLLER FOR DELETE USER
 export const deleteUser = async(req, res) => {
   try {
-     await Users.deleteOne({_id:req.id});
+     await delete_user({_id:req.id});
      res.status(200).send({sucess:true, message:"user deleted successfully"});
 
   } catch (error) {
@@ -116,10 +112,7 @@ export const deleteUser = async(req, res) => {
 export const getUserWithPageNo = async(req, res) => {
   const {page} = req.params;
   try {
-    const user_data = await Users.find();
-    const start_index = (page - 1)*10;
-    const end_index = page*10;
-    const sliced_data = user_data.slice(start_index, end_index);
+    const sliced_data = await dataWithPage(page);
     res.status(200).send({success:true, sliced_data})
   } catch (error) {
     res.status(500).send({success:false, message:"internal server error", error})
@@ -131,14 +124,14 @@ export const getUserWithPageNo = async(req, res) => {
 export const createAddress = async(req, res) => {
   const {address, city, state, pinCode , mobileNumber} = req.body;
   try {
-     const user_data= await Users.findOne({_id:req.id});
+     const user_data= await fetchUser({_id:req.id});
      if(user_data==null)
      {
-      return res.status(203).send({success:true, message:"user not register , please first register"})
+      return res.status(401).send("user not register , please first register")
      }
      const newAddress = new userAddress({user_id:req.id, address, city, state, pinCode, mobileNumber})
      await newAddress.save();
-     res.status(200).send({success:true, message:"user address created successfully", newAddress})
+     res.status(201).send({success:true, message:"user address created successfully", newAddress})
   } catch (error) {
     res.status(500).send({success:false, message:"internal server error", error})
   }
@@ -148,12 +141,11 @@ export const createAddress = async(req, res) => {
 export const getUserWithAddress = async(req, res) => {
   const {id} = req.params;
   try {
-    const user_data = await Users.findOne({_id:id});
-    const user_addresses = await userAddress.find({user_id:id});
+    const user_data = await fetchUser({_id:id})
     res.status(200).send({
       success:true, 
       message:"User data fetched succssfully",
-      data:{user_data, addresses:user_addresses}
+      user_data
     })
   } catch (error) {
     res.status(500).send({success:false, message:"internal server error", error});

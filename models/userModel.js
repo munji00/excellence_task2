@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { hash_password , compare_password} from "../utility/helpers.js";
 
 const userSchema = new mongoose.Schema({
     firstName:{
@@ -23,7 +24,20 @@ const userSchema = new mongoose.Schema({
     password:{
         type:String,
         required:true
-    }
+    },
+    address:[{type:mongoose.Schema.Types.ObjectId, ref:'userAddress'}],
+     
 }, {timestamps:true});
+
+//pre hook
+userSchema.pre("save", async function(next){
+    try {
+    const hashedPassword = await hash_password(this.password);
+    this.set('password', hashedPassword);
+    next();
+    } catch (error) {
+        next(error);
+    }  
+})
 
 export default mongoose.model('User' , userSchema);

@@ -1,5 +1,6 @@
-import Users from '../models/userModel.js'
 import userTokenCollection from '../models/accessTokenSchema.js'
+
+
 export const verifyUser = async(req, res, next) => {
         const token = req.headers.access_token;
         try {

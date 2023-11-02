@@ -1,5 +1,5 @@
 import express from 'express';
-import { db_connection } from './helperFunction.js';
+import db_connection  from './utility/db_configration.js';
 import { port } from './config/config.js';
 import userRoutes from './routes/userRoutes.js';
 
