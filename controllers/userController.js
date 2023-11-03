@@ -1,10 +1,8 @@
-import jwt from 'jsonwebtoken';
+
 import {validationResult} from 'express-validator'
 import { fetchUser, matchPassword, registerUser, generateToken, saveToken, delete_user, dataWithPage } from '../services/userServices.js';
-import Users from '../models/userModel.js'
 import { userAddress } from '../models/userAddressModel.js'
 import { compare_password, hash_password} from '../utility/helpers.js';
-import {secretKey} from '../config/config.js'
 
 
 //USER REGISTERATION CONTROLLER
@@ -71,12 +69,11 @@ export const  userLogin = async (req, res) => {
     return res.status(203).send({message:"email or password is incorrect"});
    }
 
-    const user_token = generateToken(req.body.password)
+    const user_token = generateToken(req.body.email)
     await saveToken({user_id:existingUser._id, accessToken:user_token});
     res.status(200).send({success:true, message:"user login successfully", access_token:user_token});
 
  } catch (error) {
-  console.log(error);
   res.status(500).send({success:false, message:"internal error in server", error})
  }
 }
@@ -148,6 +145,7 @@ export const getUserWithAddress = async(req, res) => {
       user_data
     })
   } catch (error) {
+    console.log(error);
     res.status(500).send({success:false, message:"internal server error", error});
   }
 

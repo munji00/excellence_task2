@@ -2,7 +2,7 @@ import userTokenCollection from '../models/accessTokenSchema.js'
 
 
 export const verifyUser = async(req, res, next) => {
-        const token = req.headers.access_token;
+        const token = req.get("authorization").split(" ")[1];
         try {
             const isExist = await userTokenCollection.findOne({accessToken:token})
             if(isExist)

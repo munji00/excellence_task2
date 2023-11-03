@@ -4,7 +4,7 @@ import md5 from 'md5';
 
 export const fetchUser = async(field) =>{
     
-    return await Users.findOne(field);
+    return await Users.findOne(field).populate('address');
 }
 
 export const matchPassword = (password, confirmPassword) =>{
@@ -27,7 +27,7 @@ export const saveToken = async(tokenData) => {
 }
 
 export const delete_user = async(field) =>{
-    await Users.delete(field)
+    await Users.deleteOne(field)
 }
 
 export const dataWithPage = async(page) => {
