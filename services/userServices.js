@@ -1,7 +1,8 @@
 import Users from '../models/userModel.js'
 import jwt from 'jsonwebtoken';
 import { secretKey } from '../config/config.js';
-import userTokenCollection from '../models/accessTokenSchema.js'
+
+
 export const userServices = {
     fetchUser : async(field) => await Users.findOne(field).populate('address'),
     matchPassword :(password, confirmPassword)=> password===confirmPassword,
@@ -12,12 +13,7 @@ export const userServices = {
       return newUser;
     },
 
-    generateToken:(obj) => jwt.sign(obj, secretKey, {expiresIn:'1h'}),
-
-    saveToken :async(tokenData) => {
-      const newTokenData = new userTokenCollection(tokenData);
-      await newTokenData.save()
-    },
+    generateToken:(obj, time='1h') => jwt.sign(obj, secretKey, {expiresIn:time}),
 
     delete_user:async(field) =>  await Users.deleteOne(field),
 

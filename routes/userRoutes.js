@@ -12,8 +12,11 @@ userRoutes.post(user_routes_path.login , loginValidator ,loginRegValidator, allC
 userRoutes.get(user_routes_path.getOne , verifyUser , allControllers.getUser);
 userRoutes.put(user_routes_path.delete , verifyUser , allControllers.deleteUser);
 userRoutes.get(user_routes_path.getWithPage , allControllers.getUserWithPageNo);
-userRoutes.post(user_routes_path.createAdd , verifyUser , allControllers.createAddress);
+userRoutes.post(user_routes_path.address , verifyUser , allControllers.createAddress);
 userRoutes.get(user_routes_path.getwithAdd , verifyUser , allControllers.getUserWithAddress);
+userRoutes.delete(user_routes_path.address, verifyUser, allControllers.deleteAdd)
+userRoutes.post(user_routes_path.forgotPassword, allControllers.forgotPassword)
+userRoutes.put(user_routes_path.resetPassword, verifyUser, allControllers.resetPassword)
 
 
 export default userRoutes;
