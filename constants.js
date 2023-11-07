@@ -4,8 +4,10 @@ export const  user_routes_path = {
     getOne:'/get',
     delete:'/delete',
     getWithPage:'/list/:page',
-    createAdd:'/address',
-    getwithAdd:'/get/:id'
+    address:'/address',
+    getwithAdd:'/get/:id',
+    forgotPassword:'/forgot-password',
+    resetPassword:'/verify-reset-password'
 }
 
 export const user_res_mess={
@@ -18,5 +20,6 @@ export const user_res_mess={
     exists:"Email or username already exists. please login",
     found:'User found successfully ',
     add_created:'User address created successfully',
-    notValid:'Input field is not valid'
+    notValid:'Input field is not valid',
+    passwordReset:'Password have successfully reset'
 }

@@ -1,4 +1,4 @@
-import userTokenCollection from '../models/accessTokenSchema.js';
+
 import jwt from 'jsonwebtoken';
 import { secretKey } from '../config/config.js';
 import { user_res_mess } from '../constants.js';
@@ -7,11 +7,10 @@ import { user_res_mess } from '../constants.js';
 export const verifyUser = async(req, res, next) => {
         try {
             const token = req.get("authorization").split(" ")[1];
-            const decoded_data = jwt.verify(token , secretKey);
-            const isExist = await userTokenCollection.findOne({accessToken:token})
-            if(isExist)
+            const {email} = jwt.verify(token , secretKey);
+            if(email)
             {
-              req.id=isExist.user_id;
+              req.user_email=email;
               next();
             }
             else

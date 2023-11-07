@@ -27,8 +27,8 @@ export const loginRegValidator = async(req, res, next) => {
   if(!existingUser)
       return res.status(404).send(user_res_mess.notFound);
    
-
-  if(!compare_password(req.body.password, existingUser.password))
+  
+  if(!await compare_password(req.body.password, existingUser.password))
       return res.status(203).send(user_res_mess.notMatch);
 
    const genrated_token = userServices.generateToken({email:req.body.email, userName:existingUser.userName})
