@@ -7,7 +7,8 @@ export const  user_routes_path = {
     address:'/address',
     getwithAdd:'/get/:id',
     forgotPassword:'/forgot-password',
-    resetPassword:'/verify-reset-password'
+    resetPassword:'/verify-reset-password',
+    uploadFile:'/profile-image'
 }
 
 export const user_res_mess={
@@ -21,5 +22,5 @@ export const user_res_mess={
     found:'User found successfully ',
     add_created:'User address created successfully',
     notValid:'Input field is not valid',
-    passwordReset:'Password have successfully reset'
+    passwordReset:'Password have successfully reset',
 }

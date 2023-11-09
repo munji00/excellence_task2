@@ -2,6 +2,7 @@ import express from 'express';
 import db_connection  from './utility/db_configration.js';
 import { port } from './config/config.js';
 import userRoutes from './routes/userRoutes.js';
+import { errorHandler } from './handlers/errorHandler.js';
 
 
 //creating server
@@ -20,6 +21,8 @@ db_connection();
 
 //all routes
 app.use('/user', userRoutes);
+//global error handler
+app.use(errorHandler)
 
 
 //route for testing

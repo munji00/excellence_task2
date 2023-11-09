@@ -4,7 +4,7 @@ import * as allControllers from '../controllers/userController.js'
 import { verifyUser } from '../middleware/verifyUser.js';
 import { user_routes_path } from '../constants.js';
 import { registerReqValidator, loginRegValidator } from '../middleware/verifyUserReq.js';
-
+import {upload} from '../config/multerConfigration.js'
 const userRoutes = express.Router();
 
 userRoutes.post(user_routes_path.register, registerValidator,registerReqValidator , allControllers.userRegister)
@@ -17,6 +17,7 @@ userRoutes.get(user_routes_path.getwithAdd , verifyUser , allControllers.getUser
 userRoutes.delete(user_routes_path.address, verifyUser, allControllers.deleteAdd)
 userRoutes.post(user_routes_path.forgotPassword, allControllers.forgotPassword)
 userRoutes.put(user_routes_path.resetPassword, verifyUser, allControllers.resetPassword)
+userRoutes.put(user_routes_path.uploadFile, upload.single('profile-img'), allControllers.uploadFile)
 
 
 export default userRoutes;
