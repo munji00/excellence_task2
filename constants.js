@@ -8,7 +8,8 @@ export const  user_routes_path = {
     getwithAdd:'/get/:id',
     forgotPassword:'/forgot-password',
     resetPassword:'/verify-reset-password',
-    uploadFile:'/profile-image'
+    uploadFile:'/profile-image',
+    regenrateAccessToken:'/regenrate-access-token'
 }
 
 export const user_res_mess={

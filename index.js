@@ -3,6 +3,7 @@ import db_connection  from './utility/db_configration.js';
 import { port } from './config/config.js';
 import userRoutes from './routes/userRoutes.js';
 import { errorHandler } from './handlers/errorHandler.js';
+import prodRoute from './routes/ecomProdRoutes.js';
 
 
 //creating server
@@ -21,6 +22,7 @@ db_connection();
 
 //all routes
 app.use('/user', userRoutes);
+app.use('/fetch' , prodRoute)
 //global error handler
 app.use(errorHandler)
 
