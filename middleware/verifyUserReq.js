@@ -1,7 +1,11 @@
 import { validationResult } from "express-validator";
+import randomToken from 'rand-token';
 import { userServices } from "../services/userServices.js";
 import { user_res_mess } from "../constants.js";
 import { compare_password } from "../utility/helpers.js";
+
+
+export const refreshTokens = {}
 
 
 export const registerReqValidator = (req, res, next) => {
@@ -32,6 +36,9 @@ export const loginRegValidator = async(req, res, next) => {
       return res.status(203).send(user_res_mess.notMatch);
 
    const genrated_token = userServices.generateToken({email:req.body.email, userName:existingUser.userName})
+   const refreshToken = randomToken.uid(256);
+   refreshTokens = {...refreshTokens, [refreshToken]:{email:req.body.email, userName:existingUser.userName}}
+   req.refresh_token = refreshToken;
    req.token=  genrated_token;
    req.user=existingUser; 
       

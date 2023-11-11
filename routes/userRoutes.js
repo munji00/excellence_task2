@@ -18,6 +18,7 @@ userRoutes.delete(user_routes_path.address, verifyUser, allControllers.deleteAdd
 userRoutes.post(user_routes_path.forgotPassword, allControllers.forgotPassword)
 userRoutes.put(user_routes_path.resetPassword, verifyUser, allControllers.resetPassword)
 userRoutes.put(user_routes_path.uploadFile, upload.single('profile-img'), allControllers.uploadFile)
+userRoutes.post(user_routes_path.regenrateAccessToken, allControllers.newAccessToken)
 
 
 export default userRoutes;
