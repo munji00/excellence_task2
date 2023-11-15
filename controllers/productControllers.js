@@ -1,12 +1,30 @@
 import axios from 'axios';
-export const fetchMobileProducts = async(req, res) => {
+import env from 'dotenv'
+import { resHandler } from '../handlers/resHandler.js';
+import {get_flipkart_mobile_data, get_snapdeal_tshirt } from '../services/webScrapingServices.js';
+
+env.config()
+
+
+export const fetchMobileProducts = async(req, res, next) => {
     try {
-        const res = await axios.get("https://www.flipkart.com/search?q=mobile");
-        const data = JSON.stringify(res.data)
-        console.log(data);
-        res.send({success:true, data})
+        const data = await axios.get(process.env.FLIPKART_MOBILE_URL);
+        const orgData = get_flipkart_mobile_data(data.data)
+        resHandler(res, 200, orgData)
     } catch (error) {
-        console.log(error);
-        res.send(error);
+        next(error);
     }
 }
+
+
+
+export const fetch_t_shirt = async(req, res, next) => {
+    try {
+        const data = await axios.get(process.env.SNAPDEAL_TSHIRT_URL)
+        const tshirt_data = get_snapdeal_tshirt(data.data)
+        resHandler(res, 200, tshirt_data);
+    } catch (error) {
+        next(error)
+    }
+}
+

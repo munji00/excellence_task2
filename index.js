@@ -18,7 +18,7 @@ app.listen(port, ()=>{
 })
 
 //database connection
-db_connection();
+//db_connection();
 
 //all routes
 app.use('/user', userRoutes);
