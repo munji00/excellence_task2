@@ -1,27 +1,33 @@
-import mongoose from "mongoose";
+import {DataTypes } from 'sequelize';
+import { sequelize } from '../utility/db_configration.js';
 
-const addressSchema = new mongoose.Schema({
-    user_id:{
-        type:String
-    },
-    address:{
-        type:String
-    },
-    city:{
-        type:String
-    },
-    state:{
-        type:String
-    },
-    pinCode:{
-        type:String
-    },
-    phoneNumber:{
-        type:String,
-        min:10,
-        max:10
-    }
+export const userAddress = sequelize.define('userAddress', {
+  user_id: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  address: {
+    type: DataTypes.STRING,
+    allowNull:false
+  },
+  city:{
+    type: DataTypes.STRING
+  },
+  state: {
+    type: DataTypes.STRING,
+    allowNull:false
+  },
+  pincode: {
+    type: DataTypes.STRING,
+    allowNull:false
+  },
+}, {
+  tableName:"userAddress",
+  timestamps:true
+  // Other model options go here
+});
 
-})
+userAddress.sync();
 
-export const userAddress = mongoose.model('userAddress', addressSchema);
+// `sequelize.define` also returns the model
+console.log(userAddress === sequelize.models.userAddress); // true

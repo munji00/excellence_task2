@@ -13,7 +13,7 @@ export const verifyUser = async(req, res, next) => {
             if(!decoded_data){
               resHandler(res, 404, user_res_mess.notFound)
             }
-            else if(decoded_data.exp*1000 > curr_date)
+            else if(decoded_data.exp*1000 < curr_date.getTime())
             {
               return resHandler(res, 401, "access token expired")
             }

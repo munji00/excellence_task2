@@ -1,4 +1,37 @@
-import mongoose from "mongoose";
+import {DataTypes } from 'sequelize';
+import { sequelize } from '../utility/db_configration.js';
+
+export const User = sequelize.define('User', {
+  firstName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  lastName: {
+    type: DataTypes.STRING,
+    allowNull:false
+  },
+  userName: {
+    type: DataTypes.STRING
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull:false
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull:false
+  },
+}, {
+  tableName:"users",
+  timestamps:true
+  // Other model options go here
+});
+
+User.sync();
+
+// `sequelize.define` also returns the model
+console.log(User === sequelize.models.User); // true
+/*import mongoose from "mongoose";
 import { hash_password , compare_password} from "../utility/helpers.js";
 
 const userSchema = new mongoose.Schema({
@@ -40,4 +73,4 @@ userSchema.pre("save", async function(next){
     }  
 })
 
-export default mongoose.model('User' , userSchema);
+export default mongoose.model('User' , userSchema);*/

@@ -4,7 +4,6 @@ import { user_res_mess } from '../constants.js';
 import { userServices } from '../services/userServices.js';
 import { resHandler } from '../handlers/resHandler.js';
 import { hash_password} from '../utility/helpers.js';
-import Users from '../models/userModel.js'
 import { send_mail } from '../config/emailConfigration.js';
 import { refreshTokens } from '../middleware/verifyUserReq.js'
 
@@ -16,11 +15,12 @@ export const userRegister = async(req, res, next) => {
 
   try {
     //checking existing user
-    const existingUser = await userServices.fetchUser({email:req.body.email})
+    const existingUser = await userServices.fetchUser({email:req.body.email});
     if(existingUser)
     {
         //return res.status(406).send(user_res_mess.exists);
-        return resHandler(res,406, user_res_mess.exists);
+        console.log("email exists")
+         return resHandler(res,406, user_res_mess.exists);
     }
 
     //checking is user register with same username
@@ -28,22 +28,23 @@ export const userRegister = async(req, res, next) => {
     if(userNameExists)
     {
         //return res.status(403).send(user_res_mess.exists)
+        console.log("username exists")
         return resHandler(res, 403, user_res_mess.exists)
     }
 
     //registering user
     const newUser = await userServices.registerUser(req.body)
-    await send_mail({
+    /*await send_mail({
        to:req.body.email,
        link:"",
        message:'register successfully',
-       subject:"regarding signup"})
+       subject:"regarding signup"}) */
        
     //res.status(201).send({success:true, message:user_res_mess.signup, newUser})
        resHandler(res, 201, {success:true, message:user_res_mess.signup, newUser})
 
   } catch (error) {
-       console.log(error)
+        //console.log(error)
        //errorHandler(res, 500, error.message);
        next(error)
   }
@@ -56,7 +57,6 @@ export const userRegister = async(req, res, next) => {
 //USER LOGIN CONTROLLER
 export const  userLogin = async (req, res, next) => {
  try {
-    console.log(refreshTokens)
     resHandler(res, 200, {
       success:true,
       message:user_res_mess.login,
@@ -75,7 +75,7 @@ export const  userLogin = async (req, res, next) => {
 //CONTROOLER TO GET A SINGLE USER
 export const getUser = async(req, res, next) => {
   try {
-    const user_data= await userServices.fetchUser({email:req.user_email});
+    const user_data= await userServices.fetchUser({email:req.email});
     if(!user_data)
     {
       return resHandler(res, 401, user_res_mess.notFound)
@@ -94,7 +94,7 @@ export const getUser = async(req, res, next) => {
 //CONTROLLER FOR DELETE USER
 export const deleteUser = async(req, res, next) => {
   try {
-     await userServices.delete_user({_id:req.user_email});
+     await userServices.delete_user({email:req.email});
      resHandler(res, 200, user_res_mess.deleted);
   } catch (error) {
     //res.status(500).send({success:true, message:"internal servser error", error});
@@ -123,17 +123,20 @@ export const getUserWithPageNo = async(req, res, next) => {
 
 //CONTROLLER FOR CREATING ADDRESS
 export const createAddress = async(req, res, next) => {
-  const {address, city, state, pinCode , mobileNumber} = req.body;
+  console.log("line 1" ,req.body);
+  const {address, city, state, pincode , mobile_number} = req.body;
   try {
-     const user_data= await userServices.fetchUser({email:req.user_email});
+     const user_data= await userServices.fetchUser({email:req.email});
+     console.log(user_data)
      if(user_data==null)
      {
       return resHandler(res, 401, user_res_mess.notFound)
      }
-     const newAddress = new userAddress({user_id:user_data._id, address, city, state, pinCode, mobileNumber})
-     await newAddress.save();
+     const newAddress =await userAddress.create({user_id:user_data.id, address, city, state, pincode})
+     console.log(newAddress);
      resHandler(res, 201, {success:true, message:user_res_mess.add_created, newAddress})
   } catch (error) {
+    console.log(error);
     //res.status(500).send({success:false, message:"internal server error", error})
     next(error)
   }

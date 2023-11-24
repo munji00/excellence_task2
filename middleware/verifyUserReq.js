@@ -5,7 +5,7 @@ import { user_res_mess } from "../constants.js";
 import { compare_password } from "../utility/helpers.js";
 
 
-export const refreshTokens = {}
+export let refreshTokens = {}
 
 
 export const registerReqValidator = (req, res, next) => {
@@ -32,7 +32,8 @@ export const loginRegValidator = async(req, res, next) => {
       return res.status(404).send(user_res_mess.notFound);
    
   
-  if(!await compare_password(req.body.password, existingUser.password))
+  //if(!await compare_password(req.body.password, existingUser.password))
+  if(req.body.password!==existingUser.password)
       return res.status(203).send(user_res_mess.notMatch);
 
    const genrated_token = userServices.generateToken({email:req.body.email, userName:existingUser.userName})
