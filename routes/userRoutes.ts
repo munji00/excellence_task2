@@ -4,7 +4,7 @@ import * as allControllers from '../controllers/userController.js'
 import { verifyUser } from '../middleware/verifyUser.js';
 import { user_routes_path } from '../constants.js';
 import { registerReqValidator, loginRegValidator } from '../middleware/verifyUserReq.js';
-import {upload} from '../config/multerConfigration.js'
+import {upload} from '../configration/multerConfigration.js'
 const userRoutes = express.Router();
 
 userRoutes.post(user_routes_path.register, registerValidator,registerReqValidator , allControllers.userRegister)
