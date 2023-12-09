@@ -1,33 +1,22 @@
 import express from 'express';
-import db_connection from './utility/db_configration.js';
-import { port } from './config/config.js';
+import { db_connection } from './utility/db_configration.js';
+import { redisConnection } from './configration/redisConnection.js';
+import { port } from './configration/config.js';
 import userRoutes from './routes/userRoutes.js';
 import { errorHandler } from './handlers/errorHandler.js';
-import prodRoute from './routes/ecomProdRoutes.js';
-
-
 //creating server
 export const app = express();
-
 //application level middileware
 app.use(express.json());
-app.listen(port, ()=> console.log(`server is running on port: ${port}`))
-
-
+app.listen(port, () => console.log(`server is running on port: ${port}`));
 //database connection
 db_connection();
-
+redisConnection();
 //all routes
 app.use('/user', userRoutes);
-app.use('/fetch' , prodRoute)
-
-
 //global error handler
-app.use(errorHandler)
-
-
+app.use(errorHandler);
 //route for testing
-app.get('/test', (req, res)=>{
+app.get('/test', (req, res) => {
     res.send("all is working");
-})
-
+});

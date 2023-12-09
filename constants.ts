@@ -24,4 +24,6 @@ export const user_res_mess={
     add_created:'User address created successfully',
     notValid:'Input field is not valid',
     passwordReset:'Password have successfully reset',
+    resetLink:"password reset link have sent ",
+    refTok_notFound:"refresh token not found or refresh token not valid",
 }
