@@ -1,9 +1,9 @@
 
 import jwt from 'jsonwebtoken';
-import { secretKey } from '../configration/config.js';
-import { sql_connection } from '../utility/db_configration.js';
-import { userInter, addInter } from '../interfaces.td.js';
-import { jsonDataInter } from '../interfaces.td.js';
+import { secretKey } from '../configration/config';
+import { sql_connection } from '../utility/db_configration';
+import { userInter, addInter } from '../interfaces.td';
+import { jsonDataInter } from '../interfaces.td';
 import { RowDataPacket } from 'mysql2';
 
 

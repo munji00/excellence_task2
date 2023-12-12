@@ -1,9 +1,9 @@
 import express from 'express';
-import {db_connection }from './utility/db_configration.js';
-import { redisConnection } from './configration/redisConnection.js';
-import { port } from './configration/config.js';
-import userRoutes from './routes/userRoutes.js';
-import { errorHandler } from './handlers/errorHandler.js'
+import {db_connection }from './utility/db_configration';
+import { redisConnection } from './configration/redisConnection';
+import { port } from './configration/config';
+import userRoutes from './routes/userRoutes';
+import { errorHandler } from './handlers/errorHandler'
 
 
 //creating server

@@ -1,10 +1,14 @@
 {
     "compilerOptions": {
-    "target": "es2016",
-    "module": "ES6",
-    "moduleResolution": "Node10",
+    "target": "es6",
+    "module": "CommonJS",
+    "moduleResolution": "node10",
     "outDir": "./build",
     "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@modules/*":["*"]
+    },
     "esModuleInterop":true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
