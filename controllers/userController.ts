@@ -1,12 +1,12 @@
 
-import { user_res_mess } from '../constants.js';
-import { userServices } from '../services/userServices.js';
-import { resHandler } from '../handlers/resHandler.js';
-import { hash_password} from '../utility/helpers.js';
-import { send_mail } from '../configration/emailConfigration.js';
+import { user_res_mess } from '../constants';
+import { userServices } from '../services/userServices';
+import { resHandler } from '../handlers/resHandler';
+import { hash_password} from '../utility/helpers';
+import { send_mail } from '../configration/emailConfigration';
 import { Request, Response, NextFunction } from 'express';
-import { ReqInter} from '../interfaces.td.js';
-import { client } from '../configration/redisConnection.js';
+import { ReqInter} from '../interfaces.td';
+import { client } from '../configration/redisConnection';
 
 
 

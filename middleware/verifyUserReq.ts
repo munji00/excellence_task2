@@ -1,11 +1,11 @@
 import { validationResult } from "express-validator";
-import {client} from '../configration/redisConnection.js'
+import {client} from '../configration/redisConnection'
 import { Request, Response, NextFunction } from "express";
 import randomToken from 'rand-token';
-import { userServices } from "../services/userServices.js";
-import { user_res_mess } from "../constants.js";
-import { compare_password, hash_password } from "../utility/helpers.js";
-import { ReqInter, userInter } from "../interfaces.td.js";
+import { userServices } from "../services/userServices";
+import { user_res_mess } from "../constants";
+import { compare_password, hash_password } from "../utility/helpers";
+import { ReqInter, userInter } from "../interfaces.td";
 
 
 export const registerReqValidator = async(req:ReqInter, res:Response, next:NextFunction) => {

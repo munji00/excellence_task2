@@ -2,7 +2,7 @@
 import nodemailer from 'nodemailer';
 import env from 'dotenv';
 import {google}  from 'googleapis';
-import {mailInter} from '../interfaces.td.js'
+import {mailInter} from '../interfaces.td'
 
 env.config();
 

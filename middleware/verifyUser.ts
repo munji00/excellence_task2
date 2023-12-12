@@ -1,10 +1,10 @@
 
 import jwt from 'jsonwebtoken';
-import { secretKey } from '../configration/config.js';
-import { user_res_mess } from '../constants.js';
-import { resHandler } from '../handlers/resHandler.js';
+import { secretKey } from '../configration/config';
+import { user_res_mess } from '../constants';
+import {resHandler} from '../handlers/resHandler';
 import {NextFunction, Response} from 'express'
-import { ReqInter, jsonDataInter, userInter} from '../interfaces.td.js';
+import { ReqInter, jsonDataInter, userInter} from '../interfaces.td';
 
 
 export const verifyUser = async(req:ReqInter, res:Response, next:NextFunction) => {

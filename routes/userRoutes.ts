@@ -1,10 +1,10 @@
 import express from 'express';
-import { registerValidator, loginValidator } from '../validators/userValidator.js';
-import * as allControllers from '../controllers/userController.js'
-import { verifyUser } from '../middleware/verifyUser.js';
-import { user_routes_path } from '../constants.js';
-import { registerReqValidator, loginRegValidator } from '../middleware/verifyUserReq.js';
-import {upload} from '../configration/multerConfigration.js'
+import { registerValidator, loginValidator } from '../validators/userValidator';
+import * as allControllers from '../controllers/userController'
+import { verifyUser } from '../middleware/verifyUser';
+import { user_routes_path } from '../constants';
+import { registerReqValidator, loginRegValidator } from '../middleware/verifyUserReq';
+import {upload} from '../configration/multerConfigration'
 const userRoutes = express.Router();
 
 userRoutes.post(user_routes_path.register, registerValidator,registerReqValidator , allControllers.userRegister)
